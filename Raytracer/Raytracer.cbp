@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Raytracer" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Release">
+				<Option output="bin/Release/Raytracer" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="../raytracerframework_cpp/Makefile" />
+		<Unit filename="../raytracerframework_cpp/README" />
+		<Unit filename="../raytracerframework_cpp/RayTracer.sln" />
+		<Unit filename="../raytracerframework_cpp/RayTracer.vcproj" />
+		<Unit filename="../raytracerframework_cpp/image.cpp" />
+		<Unit filename="../raytracerframework_cpp/image.h" />
+		<Unit filename="../raytracerframework_cpp/light.cpp" />
+		<Unit filename="../raytracerframework_cpp/light.h" />
+		<Unit filename="../raytracerframework_cpp/lodepng.cpp" />
+		<Unit filename="../raytracerframework_cpp/lodepng.h" />
+		<Unit filename="../raytracerframework_cpp/main.cpp" />
+		<Unit filename="../raytracerframework_cpp/make.dep" />
+		<Unit filename="../raytracerframework_cpp/material.cpp" />
+		<Unit filename="../raytracerframework_cpp/material.h" />
+		<Unit filename="../raytracerframework_cpp/object.h" />
+		<Unit filename="../raytracerframework_cpp/quad.cpp" />
+		<Unit filename="../raytracerframework_cpp/quad.h" />
+		<Unit filename="../raytracerframework_cpp/raytracer.cpp" />
+		<Unit filename="../raytracerframework_cpp/raytracer.h" />
+		<Unit filename="../raytracerframework_cpp/scene.cpp" />
+		<Unit filename="../raytracerframework_cpp/scene.h" />
+		<Unit filename="../raytracerframework_cpp/scene001.yaml" />
+		<Unit filename="../raytracerframework_cpp/scene01.png" />
+		<Unit filename="../raytracerframework_cpp/scene01.yaml" />
+		<Unit filename="../raytracerframework_cpp/scene02.yaml" />
+		<Unit filename="../raytracerframework_cpp/sphere.cpp" />
+		<Unit filename="../raytracerframework_cpp/sphere.h" />
+		<Unit filename="../raytracerframework_cpp/triangle.cpp" />
+		<Unit filename="../raytracerframework_cpp/triangle.h" />
+		<Unit filename="../raytracerframework_cpp/triple.cpp" />
+		<Unit filename="../raytracerframework_cpp/triple.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/aliascontent.cpp" />
+		<Unit filename="../raytracerframework_cpp/yaml/aliascontent.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/content.cpp" />
+		<Unit filename="../raytracerframework_cpp/yaml/content.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/conversion.cpp" />
+		<Unit filename="../raytracerframework_cpp/yaml/conversion.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/crt.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/emitter.cpp" />
+		<Unit filename="../raytracerframework_cpp/yaml/emitter.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/emittermanip.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/emitterstate.cpp" />
+		<Unit filename="../raytracerframework_cpp/yaml/emitterstate.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/emitterutils.cpp" />
+		<Unit filename="../raytracerframework_cpp/yaml/emitterutils.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/exceptions.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/exp.cpp" />
+		<Unit filename="../raytracerframework_cpp/yaml/exp.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/indentation.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/iterator.cpp" />
+		<Unit filename="../raytracerframework_cpp/yaml/iterator.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/iterpriv.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/license.txt" />
+		<Unit filename="../raytracerframework_cpp/yaml/ltnode.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/map.cpp" />
+		<Unit filename="../raytracerframework_cpp/yaml/map.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/mark.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/node.cpp" />
+		<Unit filename="../raytracerframework_cpp/yaml/node.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/nodeimpl.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/nodereadimpl.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/nodeutil.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/noncopyable.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/null.cpp" />
+		<Unit filename="../raytracerframework_cpp/yaml/null.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/ostream.cpp" />
+		<Unit filename="../raytracerframework_cpp/yaml/ostream.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/parser.cpp" />
+		<Unit filename="../raytracerframework_cpp/yaml/parser.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/parserstate.cpp" />
+		<Unit filename="../raytracerframework_cpp/yaml/parserstate.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/regex.cpp" />
+		<Unit filename="../raytracerframework_cpp/yaml/regex.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/regeximpl.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/scalar.cpp" />
+		<Unit filename="../raytracerframework_cpp/yaml/scalar.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/scanner.cpp" />
+		<Unit filename="../raytracerframework_cpp/yaml/scanner.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/scanscalar.cpp" />
+		<Unit filename="../raytracerframework_cpp/yaml/scanscalar.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/scantoken.cpp" />
+		<Unit filename="../raytracerframework_cpp/yaml/sequence.cpp" />
+		<Unit filename="../raytracerframework_cpp/yaml/sequence.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/setting.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/simplekey.cpp" />
+		<Unit filename="../raytracerframework_cpp/yaml/stlemitter.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/stream.cpp" />
+		<Unit filename="../raytracerframework_cpp/yaml/stream.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/streamcharsource.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/stringsource.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/token.h" />
+		<Unit filename="../raytracerframework_cpp/yaml/yaml.h" />
+		<Extensions>
+			<envvars />
+			<code_completion />
+			<lib_finder disable_auto="1" />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
