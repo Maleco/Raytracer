@@ -38,6 +38,29 @@ Hit Sphere::intersect(const Ray &ray)
     * intersection point from the ray origin in *t (see example).
     ****************************************************/
 
+	double t, tp, tm, D;
+    Vector V(ray.O - position);
+
+    D = ((ray.D.dot(V))*(ray.D.dot(V))) - (ray.D.dot(ray.D))*(V.dot(V) - r*r);  // Discriminant
+
+    if (D<0) {
+      return Hit::NO_HIT();
+    } else {
+      tp = (-ray.D.dot(V) + sqrt(D))/ray.D.dot(ray.D);
+      tm = (-ray.D.dot(V) - sqrt(D))/ray.D.dot(ray.D);
+      if (tp<0 && tm<0){
+	return Hit::NO_HIT();
+      }
+      if (tp<0){
+	t = tm;
+      } else if (tm<0){
+	t = tp;
+      } else {
+	t = min(tp,tm);
+      }
+    }
+
+	/*
     Vector diff = ray.O - position;
     //Discriminant
     double discr = ((ray.D.dot(diff)) * (ray.D.dot(diff))) - (ray.D.dot(ray.D)*(diff.dot(diff)) - r*r);
@@ -51,7 +74,7 @@ Hit Sphere::intersect(const Ray &ray)
       t_plus = (-ray.D.dot(ray.O-position) + sqrt(discr))/ray.D.dot(ray.D);
     }
     double t = min(t_min,t_plus);
-
+	*/
     /****************************************************
     * RT1.2: NORMAL CALCULATION
     *

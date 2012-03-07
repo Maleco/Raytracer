@@ -139,10 +139,9 @@ bool Raytracer::readScene(const std::string& inputFilename)
             scene->setShadowMode(shadowMode);
 
             /// Set the maximum recursion depth
-            int max;
-            doc["MaxRecursionDepth"] >> max;
-            scene->setMaxRecursionDepth(max);
-
+            	int max;
+				doc["MaxRecursionDepth"] >> max;
+				scene->setMaxRecursionDepth(max);
 
             // Read and parse the scene objects
             const YAML::Node& sceneObjects = doc["Objects"];

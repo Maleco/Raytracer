@@ -73,9 +73,6 @@ Color Scene::trace(const Ray &ray, int recursionDepth)
 					Ray ray(hit + 0.001 * N, lights[i]->position - hit);	//Outgoing light ray (L)
 					for(unsigned int j = 0; j < objects.size(); ++j){		//For each object
 						Hit shadow(objects[j]->intersect(ray));
-						if(!isnan(shadow.t)) {
-								cout << "shadow: " << shadow.t << " shadow_min: " << shadow_min.t << endl;
-						}
 						if(shadow.t < shadow_min.t){
 							isShadow = true;
 						}
