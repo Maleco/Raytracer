@@ -19,8 +19,7 @@
 #include <iostream>
 #include <math.h>
 
-Color Scene::trace(const Ray &ray, int recursionDepth)
-{
+Color Scene::trace(const Ray &ray, int recursionDepth){
     // Find hit object and distance
     Hit min_hit(std::numeric_limits<double>::infinity(),Vector());
     Object *obj = NULL;
@@ -63,30 +62,41 @@ Color Scene::trace(const Ray &ray, int recursionDepth)
 
     switch(rendermode){
     	case phong:{
-			color += material->color*material->ka;				//With multiple lights, ambiant only depends on the material values
 
-			Hit shadow_min(std::numeric_limits<double>::infinity(),Vector());
-			for(unsigned int i = 0; i < lights.size(); i++){	//For each light
+			//For each light
+			for(unsigned int i = 0; i < lights.size(); i++){
 				bool isShadow = false;
 
+				//Ambiant		+ LightColor MaterialColor ka
+				color += lights[i]->color * material->color * material->ka;
+
 				if(Shadow){
-					Ray ray(hit + 0.001 * N, lights[i]->position - hit);	//Outgoing light ray (L)
-					for(unsigned int j = 0; j < objects.size(); ++j){		//For each object
-						Hit shadow(objects[j]->intersect(ray));
-						if(shadow.t < shadow_min.t){
+					//Outgoing light ray (L)
+					Ray light(hit + 0.001 * N, lights[i]->position - hit);
+
+					//For each object
+					for(unsigned int j = 0; j < objects.size(); ++j){
+
+						//Check to see if there's a hit between the object and the light
+						Hit shadow(objects[j]->intersect(light));
+
+						//If hit -> There's a shadow
+						if(shadow.t < std::numeric_limits<double>::infinity())
 							isShadow = true;
-						}
 					}
 				}
+
+				//If there's no shadow -> calculate colors
 				if(!isShadow){
+
 					//The light vector
-					Vector L = lights[i]->position - hit;
-					L.normalize();
+					Vector L = lights[i]->position - hit;L.normalize();
 					//The R vector (required for specular shading)
 					Vector R = (-1*L) + 2 * (L.dot(N)) * N;
 
 					//Diffuse		+ dot(L,N) LightColor MaterialColor kd
 					color += (max(0.0,N.dot(L)) * lights[i]->color) * material->color * material->kd;
+
 					//Specular		+ dot(R,V)^n LightColor ks
 					color += pow(max(0.0,R.dot(V)), material->n) * lights[i]->color * material->ks;
 				}
@@ -94,21 +104,30 @@ Color Scene::trace(const Ray &ray, int recursionDepth)
 
 			if(recursionDepth <= maxRecursionDepth){
 				Color buffer(0.0, 0.0, 0.0);
+
+				//The reflected direction
 				Vector reflectV((V + 2*(-N.dot(V))*N));
+
 					for (unsigned int i=0; i<10; i++){
+
+						//The reflected ray
 						Ray reflect(hit + 0.001 * N, -reflectV);
-						buffer += material->ks*trace(reflect, recursionDepth+1); // Reflect
+
+						//Calculate reflection through recursion
+						buffer += material->ks*trace(reflect, recursionDepth+1);
 						reflectV.x += 0.01 * cos(0.5);
 						reflectV.y += 0.01 * sin(0.5);
 					}
+
+					//Color = average buffer value
 					color += buffer/10;
 			}
     	}
     	break;
 
 		case zbuffer:{
-			cout << "henk" << endl;
-			double distance = hit.z/min_hit.t; //The distance = z-coordinate divided by it's maximum value (normalized)
+			//The distance = z-coordinate divided by it's maximum value (normalized)
+			double distance = hit.z/min_hit.t;
 			color.set(distance);
 		}
 		break;
@@ -120,19 +139,39 @@ Color Scene::trace(const Ray &ray, int recursionDepth)
 			color.set(x,y,z);
 		}
     }
-
     return color;
+}
+
+double calculateMinMaxDistance(Image &img){
+	int w = img.width();
+    int h = img.height();
+
+	for (int y = 0; y < h; y++) {
+        for (int x = 0; x < w; x++) {
+        }
+	}
+
+
 }
 
 void Scene::render(Image &img)
 {
     int w = img.width();
     int h = img.height();
+
+    if(rendermode == zbuffer){
+    	int minDistance, *maxDistance;
+		for (int y = 0; y < h; y++) {
+			for (int x = 0; x < w; x++) {
+
+			}
+		}
+		}
     for (int y = 0; y < h; y++) {
         for (int x = 0; x < w; x++) {
             Point pixel(x+0.5, h-1-y+0.5, 0);
             Ray ray(eye, (pixel-eye).normalized());
-            Color col = trace(ray, 0 /* RecursionDepth*/);
+            Color col = trace(ray, 1 /* RecursionDepth*/);
             col.clamp();
             img(x,y) = col;
         }
@@ -161,8 +200,6 @@ void Scene::setRenderMode(string rm){
 		rendermode = zbuffer;
 	}else if(!rm.compare("normal")){
 		rendermode = normal;
-	}else {
-		rendermode = phong;
 	}
 }
 

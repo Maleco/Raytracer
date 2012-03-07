@@ -133,15 +133,29 @@ bool Raytracer::readScene(const std::string& inputFilename)
             // Read scene configuration options
             scene->setEye(parseTriple(doc["Eye"]));
 
+            /// Set the Render mode
+            try{
+            	string rm;
+            	doc["RenderMode"] >> rm;
+            	scene->setRenderMode(rm);
+            } catch (YAML::TypedKeyNotFound <std::string>& e){
+			}
+
             /// Set the shadow mode
-            bool shadowMode;
-            doc["Shadows"] >> shadowMode;
-            scene->setShadowMode(shadowMode);
+            try{
+            	bool shadowMode;
+				doc["Shadows"] >> shadowMode;
+				scene->setShadowMode(shadowMode);
+			} catch (YAML::TypedKeyNotFound <std::string>& e){
+			}
 
             /// Set the maximum recursion depth
-            	int max;
+			try {
+				int max;
 				doc["MaxRecursionDepth"] >> max;
 				scene->setMaxRecursionDepth(max);
+			} catch (YAML::TypedKeyNotFound <std::string>& e){
+			}
 
             // Read and parse the scene objects
             const YAML::Node& sceneObjects = doc["Objects"];

@@ -49,14 +49,14 @@ Hit Sphere::intersect(const Ray &ray)
       tp = (-ray.D.dot(V) + sqrt(D))/ray.D.dot(ray.D);
       tm = (-ray.D.dot(V) - sqrt(D))/ray.D.dot(ray.D);
       if (tp<0 && tm<0){
-			return Hit::NO_HIT();
+	return Hit::NO_HIT();
       }
       if (tp<0){
-			t = tm;
+	t = tm;
       } else if (tm<0){
-			t = tp;
+	t = tp;
       } else {
-			t = min(tp,tm);
+	t = min(tp,tm);
       }
     }
 
