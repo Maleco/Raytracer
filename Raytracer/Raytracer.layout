@@ -4,26 +4,32 @@
 	<File name="../raytracerframework_cpp/image.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="0" topLine="54" />
 	</File>
-	<File name="../raytracerframework_cpp/light.h" open="0" top="0" tabpos="0">
-		<Cursor position="934" topLine="28" />
+	<File name="../raytracerframework_cpp/light.h" open="1" top="0" tabpos="4">
+		<Cursor position="1314" topLine="28" />
 	</File>
 	<File name="../raytracerframework_cpp/main.cpp" open="0" top="0" tabpos="1">
 		<Cursor position="1193" topLine="12" />
+	</File>
+	<File name="../raytracerframework_cpp/object.h" open="1" top="0" tabpos="6">
+		<Cursor position="689" topLine="0" />
 	</File>
 	<File name="../raytracerframework_cpp/raytracer.cpp" open="0" top="0" tabpos="3">
 		<Cursor position="2551" topLine="80" />
 	</File>
 	<File name="../raytracerframework_cpp/scene.cpp" open="1" top="1" tabpos="2">
-		<Cursor position="4287" topLine="143" />
+		<Cursor position="1373" topLine="41" />
 	</File>
 	<File name="../raytracerframework_cpp/scene.h" open="1" top="0" tabpos="1">
-		<Cursor position="956" topLine="22" />
+		<Cursor position="1091" topLine="22" />
 	</File>
 	<File name="../raytracerframework_cpp/scene01.yaml" open="0" top="0" tabpos="0">
 		<Cursor position="536" topLine="9" />
 	</File>
 	<File name="../raytracerframework_cpp/sphere.cpp" open="1" top="0" tabpos="3">
-		<Cursor position="1302" topLine="8" />
+		<Cursor position="1443" topLine="13" />
+	</File>
+	<File name="../raytracerframework_cpp/sphere.h" open="1" top="0" tabpos="5">
+		<Cursor position="578" topLine="0" />
 	</File>
 	<File name="../raytracerframework_cpp/triple.h" open="0" top="0" tabpos="3">
 		<Cursor position="3728" topLine="180" />

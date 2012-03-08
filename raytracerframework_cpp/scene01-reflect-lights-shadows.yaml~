@@ -15,7 +15,7 @@
 Eye: [200,200,1000]  
 
 Shadows: true
-MaxRecursionDepth: 5
+MaxRecursionDepth: 20
 
 Lights:
 - position: [-200,600,1500]

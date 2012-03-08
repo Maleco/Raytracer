@@ -41,7 +41,11 @@ private:
     int maxRecursionDepth;
 
 public:
-    Color trace(const Ray &ray, int recursionDepth);
+    Hit findMinHit(const Ray &ray);
+    Color traceNormal(const Ray &ray);
+    Color traceZBuffer(const Ray &ray, Image &img);
+    Color tracePhong(const Ray &ray, int recursionDepth);
+    Color trace(const Ray &ray, Image &img);
     void render(Image &img);
     void addObject(Object *o);
     void addLight(Light *l);
