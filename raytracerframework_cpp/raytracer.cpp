@@ -25,6 +25,8 @@
 #include <fstream>
 #include <assert.h>
 
+double viewSizeX, viewSizeY;
+
 // Functions to ease reading from YAML input
 void operator >> (const YAML::Node& node, Triple& t);
 Triple parseTriple(const YAML::Node& node);
@@ -131,7 +133,25 @@ bool Raytracer::readScene(const std::string& inputFilename)
             parser.GetNextDocument(doc);
 
             // Read scene configuration options
-            scene->setEye(parseTriple(doc["Eye"]));
+            try {
+				const YAML::Node& Camera = doc["Camera"];
+				scene->setEye(parseTriple(Camera["eye"]));
+				scene->setCenter(parseTriple(Camera["center"]));
+				scene->setUp(parseTriple(Camera["up"]));
+				const YAML::Node& viewSize = Camera["viewSize"];
+				viewSizeX =  viewSize[0];
+				viewSizeY =  viewSize[1];
+			} catch (YAML::TypedKeyNotFound <std::string>& e){
+				scene->setEye(parseTriple(doc["Eye"]));
+			}
+
+			try {
+				const YAML::Node& Camera = doc["Camera"];
+				scene->setApertureRadius(Camera["apertureRadius"]);
+				scene->setApertureSamples(Camera["apertureSamples"]);
+			} catch (YAML::TypedKeyNotFound <std::string>& e){
+			}
+
 
             /// Set the Render mode
             try{
@@ -154,6 +174,15 @@ bool Raytracer::readScene(const std::string& inputFilename)
 				int max;
 				doc["MaxRecursionDepth"] >> max;
 				scene->setMaxRecursionDepth(max);
+			} catch (YAML::TypedKeyNotFound <std::string>& e){
+			}
+
+			/// Set the supersampling factor
+			try {
+				const YAML::Node& SuperSampling = doc["SuperSampling"];
+				int superSampling;
+				SuperSampling["factor"] >> superSampling;
+				scene->setSuperSamplingFactor(superSampling);
 			} catch (YAML::TypedKeyNotFound <std::string>& e){
 			}
 
@@ -195,9 +224,8 @@ bool Raytracer::readScene(const std::string& inputFilename)
     return true;
 }
 
-void Raytracer::renderToFile(const std::string& outputFilename)
-{
-    Image img(400,400);
+void Raytracer::renderToFile(const std::string& outputFilename){
+    Image img(viewSizeX,viewSizeY);
     cout << "Tracing..." << endl;
     scene->render(img);
     cout << "Writing image to " << outputFilename << "..." << endl;

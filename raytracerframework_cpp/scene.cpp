@@ -17,7 +17,10 @@
 #include "scene.h"
 #include "material.h"
 #include <iostream>
+
 #include <math.h>
+#define CONST_C apertureRadius/(up.length()*sqrt(apertureSamples))
+#define GOLDEN_ANGLE 137.508
 
 Hit Scene::findMinHit(const Ray &ray){
 	// Find nearest object and distance
@@ -25,28 +28,10 @@ Hit Scene::findMinHit(const Ray &ray){
     for (unsigned int i = 0; i < objects.size(); ++i) {
         Hit hit(objects[i]->intersect(ray));
         if (hit.t<min_hit.t) {
-            min_hit.t = hit.t;
-            min_hit.N = hit.N;
+            min_hit = hit;
             }
     }
     return min_hit;
-}
-
-Hit Scene::findMinMaxDistance(const Ray &ray, Image &img){
-	//The image dimensions
-	int w = img.width();
-    int h = img.height();
-
-    double minMaxDistance[] = {std::numeric_limits<double>::infinity(), 0.0}
-
-    for (int y = 0; y < h; y++) {
-        for (int x = 0; x < w; x++) {
-        	Ray ray(eye, (pixel-eye).normalized());
-        	Hit min_hit = findMinHit(ray);
-
-        	if(min_hit.z < minMaxDistance[0])
-				minMaxDistance[0] = min_hit.z
-        }
 }
 
 Color Scene::traceNormal(const Ray &ray){
@@ -66,22 +51,76 @@ Color Scene::traceNormal(const Ray &ray){
 	return Color(x, y, z);
 }
 
-Color Scene::traceZBuffer(const Ray &ray, Image &img){
+void Scene::traceZBuffer(Image &img){
 
 	Color color;
+	int w = img.width();
+   int h = img.height();
 
-	//Find the nearest object (hit)
-	Hit min_hit = findMinHit(ray);
 
-	// No hit? Return background color.
-	if (min_hit.t >= std::numeric_limits<double>::infinity())
-		return Color(0.0, 0.0, 0.0);
+	double zBuffer[w][h];
+	double min = std::numeric_limits<double>::min();
+	double max = std::numeric_limits<double>::max();
 
-	//The hit point
-	Point hit = ray.at(min_hit.t);
+	for (int y = 0; y < h; y++) {
+			for (int x = 0; x < w; x++) {
+				Point pixel(x+0.5, h-1-y+0.5, 0);
+				Ray ray(eye, (pixel-eye).normalized());
+				Hit min_hit = findMinHit(ray);
 
-	//The distance = z-coordinate divided by it's maximum value (normalized)
-	color.set((hit.z/min_hit.t));
+				//If there's no hit, zbuffer value == inf
+				if (min_hit.t == std::numeric_limits<double>::infinity()){
+					zBuffer[x][y] = std::numeric_limits<double>::max();
+				} else if((min_hit.t) < min){
+					min = min_hit.t;
+					zBuffer[x][y] = min_hit.t;
+				} else if(min_hit.t > max){
+					max = min_hit.t;
+					zBuffer[x][y] = min_hit.t;
+				} else {
+					zBuffer[x][y] = min_hit.t;
+				}
+			}
+		}
+
+
+		for (int y = 0; y < h; y++){
+			for (int x = 0; x < w; x++){
+				color.set((-1*(zBuffer[x][y]-min)/(max-min))+1);
+				color.clamp();
+				img(x,y) = color;
+			}
+		}
+
+}
+
+Color Scene::depthOfField(Point p, Vector right, double pSize){
+	Color color;
+
+	for (int n=0; n<apertureSamples; n++){
+		double th = n*GOLDEN_ANGLE;
+		double r = (CONST_C*sqrt(n))*cos(th)*pSize;
+		p += r*right;
+		p += r*up;
+		Ray ray(eye, (p-eye).normalized());
+		color += tracePhong(ray, 1);
+	}
+	return color /= apertureSamples;
+}
+
+Color Scene::superSample(Point p, Vector right, double pSize){	// p = left upper bound of pixel
+	Color color;
+
+	for (int i=1; i<=superSamplingFactor; i++){
+		p -= up*pSize/(superSamplingFactor+1);					// correct y position for super sampling
+		Point buffer = p;
+		for (int j=1; j<=superSamplingFactor; j++){
+			buffer += right*pSize/(superSamplingFactor+1);	// correct x position for super sampling
+			color += depthOfField(buffer, right, pSize);
+		}
+	}
+	color /= superSamplingFactor*superSamplingFactor;
+	color.clamp();
 	return color;
 }
 
@@ -135,21 +174,18 @@ Color Scene::tracePhong(const Ray &ray, int recursionDepth){
 
 		//Shadow
 		if(Shadow){
-			//Outgoing light ray (L)
-			Ray light(hit + 0.001 * N, lights[i]->position - hit);
+			//Ray from light to object
+			Ray light(lights[i]->position, hit - lights[i]->position);
 
-			//For each object
-			for(unsigned int j = 0; j < objects.size(); ++j){
+			//Hit from light to nearest object
+			Hit minHit = findMinHit(light);
 
-				//Check to see if there's a hit between the object and the light
-				Hit shadow(objects[j]->intersect(light));
+			//Hit from current object to light
+			Hit currentHit(obj->intersect(light));
 
-				//If hit -> There's a shadow
-				if(shadow.t < std::numeric_limits<double>::infinity())
-					isShadow = true;
-			}
+			//
+			if (minHit.t < currentHit.t) isShadow = true;
 		}
-
 		//No Shadow -> Calculate colors
 		if(!isShadow){
 
@@ -173,7 +209,7 @@ Color Scene::tracePhong(const Ray &ray, int recursionDepth){
 		//The reflected direction
 		Vector reflectV((V + 2*(-N.dot(V))*N));
 
-		for (unsigned int i=0; i<10; i++){
+		for (unsigned int i=0; i<4; i++){
 
 			//The reflected ray
 			Ray reflect(hit + 0.001 * N, -reflectV);
@@ -185,61 +221,61 @@ Color Scene::tracePhong(const Ray &ray, int recursionDepth){
 		}
 
 		//Color = average buffer value
-		color += buffer/10;
+		color += buffer/4;
 	}
 
     return color;
 }
 
-Color Scene::trace(const Ray &ray, Image &img){
-	Color color;
-
-	//Calculate color values according to the rendermode
-	switch(rendermode){
-    	case phong:
-			color = tracePhong(ray, 1);
-			break;
-		case zbuffer:
-			color = traceZBuffer(ray, img);
-			break;
-		case normal:
-			color = traceNormal(ray);
-			break;
-	}
-
-	//Return the color
-	return color;
-}
-
-void Scene::render(Image &img)
-{
+void Scene::render(Image &img){
+    if(!superSamplingFactor)
+		superSamplingFactor = 1;
     int w = img.width();
     int h = img.height();
 
-    for (int y = 0; y < h; y++) {
-        for (int x = 0; x < w; x++) {
-            Point pixel(x+0.5, h-1-y+0.5, 0);
-            Ray ray(eye, (pixel-eye).normalized());
-            Color col = trace(ray, img);
-            col.clamp();
-            img(x,y) = col;
-        }
+	if(rendermode == zbuffer){
+		traceZBuffer(img);
     }
+
+	if(rendermode == phong || rendermode == normal){
+		Vector right = ((center-eye).cross(up)).normalized();			// right vector
+		double pSize = up.length();											// pixel size as length of up vector
+		Point leftUp(center - (w/2)*pSize*right + (h/2)*pSize*up);	// pixel left upper bound
+
+		Color color;
+		for (int y = 0; y < h; y++) {
+			for (int x = 0; x < w; x++) {
+				Point pixel = leftUp + (x*pSize*right) - (y*pSize*up);		// go to correct x,y position
+				if (rendermode == normal){
+					Ray ray(eye, ((pixel + right*pSize/2 - up*pSize/2)-eye).normalized());
+					color = traceNormal(ray);
+				} else {
+					color = superSample(pixel, right, pSize);
+				}
+				img(x,y) = color;
+			}
+		}
+	}
 }
 
-void Scene::addObject(Object *o)
-{
+void Scene::addObject(Object *o){
     objects.push_back(o);
 }
 
-void Scene::addLight(Light *l)
-{
+void Scene::addLight(Light *l){
     lights.push_back(l);
 }
 
-void Scene::setEye(Triple e)
-{
+void Scene::setEye(Triple e){
     eye = e;
+}
+
+void Scene::setCenter(Triple e){
+	center = e;
+}
+
+void Scene::setUp(Triple e){
+	up = e;
 }
 
 void Scene::setRenderMode(string rm){
@@ -254,9 +290,21 @@ void Scene::setRenderMode(string rm){
 
 void Scene::setShadowMode(bool shadowMode){
 	Shadow = shadowMode;
-	cout << Shadow << endl;
 }
 
 void Scene::setMaxRecursionDepth(int max){
 	maxRecursionDepth = max;
 }
+
+void Scene::setSuperSamplingFactor(int superSampling){
+	superSamplingFactor = superSampling;
+}
+
+void Scene::setApertureSamples(int as){
+	apertureSamples = as;
+}
+
+void Scene::setApertureRadius(int ar){
+	apertureRadius = ar;
+}
+

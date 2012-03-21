@@ -36,25 +36,37 @@ private:
     std::vector<Object*> objects;
     std::vector<Light*> lights;
     Triple eye;
+    Triple center;
+    Triple up;
     RenderMode rendermode;
     bool Shadow;
     int maxRecursionDepth;
+    int superSamplingFactor;
+    int apertureSamples;
+    int apertureRadius;
 
 public:
     Hit findMinHit(const Ray &ray);
     Color traceNormal(const Ray &ray);
-    Color traceZBuffer(const Ray &ray, Image &img);
+    void traceZBuffer(Image &img);
+	Color superSample(Point p, Vector right, double pSize);
+	Color depthOfField(Point p, Vector right, double pSize);
     Color tracePhong(const Ray &ray, int recursionDepth);
     Color trace(const Ray &ray, Image &img);
     void render(Image &img);
     void addObject(Object *o);
     void addLight(Light *l);
     void setEye(Triple e);
+    void setCenter(Triple e);
+    void setUp(Triple e);
     void setRenderMode(string rm);
     void setShadowMode(bool shadowMode);
     void setMaxRecursionDepth(int max);
+    void setSuperSamplingFactor(int superSampling);
+    void setApertureSamples(int as);
+    void setApertureRadius(int ar);
     unsigned int getNumObjects() { return objects.size(); }
-    unsigned int getNumLights() { return lights.size(); }
+	unsigned int getNumLights() { return lights.size(); }
 };
 
 #endif /* end of include guard: SCENE_H_KNBLQLP6 */
