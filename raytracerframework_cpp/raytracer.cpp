@@ -51,7 +51,13 @@ Triple parseTriple(const YAML::Node& node)
 Material* Raytracer::parseMaterial(const YAML::Node& node)
 {
     Material *m = new Material();
-    node["color"] >> m->color;
+    //try {
+	//	node["color"] >> m->color;
+    //} catch (YAML::TypedKeyNotFound <std::string>& e){
+    //	if(node["texture"])
+			m->texture = new Image("earth.png");
+    //}
+	 m->texture = new Image("earth.png");
     node["ka"] >> m->ka;
     node["kd"] >> m->kd;
     node["ks"] >> m->ks;
@@ -134,23 +140,39 @@ bool Raytracer::readScene(const std::string& inputFilename)
 
             // Read scene configuration options
             try {
-				const YAML::Node& Camera = doc["Camera"];
-				scene->setEye(parseTriple(Camera["eye"]));
-				scene->setCenter(parseTriple(Camera["center"]));
-				scene->setUp(parseTriple(Camera["up"]));
-				const YAML::Node& viewSize = Camera["viewSize"];
-				viewSizeX =  viewSize[0];
-				viewSizeY =  viewSize[1];
-			} catch (YAML::TypedKeyNotFound <std::string>& e){
-				scene->setEye(parseTriple(doc["Eye"]));
-			}
+					const YAML::Node& Camera = doc["Camera"];
+					scene->setEye(parseTriple(Camera["eye"]));
+					scene->setCenter(parseTriple(Camera["center"]));
+					scene->setUp(parseTriple(Camera["up"]));
+					const YAML::Node& viewSize = Camera["viewSize"];
+					viewSizeX =  viewSize[0];
+					viewSizeY =  viewSize[1];
+				} catch (YAML::TypedKeyNotFound <std::string>& e){
+					scene->setEye(parseTriple(doc["Eye"]));
+					scene->setCenter(Triple(200,200,0));
+					scene->setUp(Triple(0,1,0));
+					viewSizeX = 400;
+					viewSizeY = 400;
+				}
 
-			try {
-				const YAML::Node& Camera = doc["Camera"];
-				scene->setApertureRadius(Camera["apertureRadius"]);
-				scene->setApertureSamples(Camera["apertureSamples"]);
-			} catch (YAML::TypedKeyNotFound <std::string>& e){
-			}
+				try {
+					const YAML::Node& Gooch = doc["GoochParameters"];
+					scene->setBlue(Gooch["b"]);
+					scene->setYellow(Gooch["y"]);
+					scene->setAlpha(Gooch["alpha"]);
+					scene->setBeta(Gooch["beta"]);
+				} catch(YAML::TypedKeyNotFound <std::string>& e){
+					// DEFAULtS!
+				}
+
+				try {
+					const YAML::Node& Camera = doc["Camera"];
+					scene->setApertureRadius(Camera["apertureRadius"]);
+					scene->setApertureSamples(Camera["apertureSamples"]);
+				} catch (YAML::TypedKeyNotFound <std::string>& e){
+					scene->setApertureRadius(0);
+					scene->setApertureSamples(1);
+				}
 
 
             /// Set the Render mode
@@ -158,33 +180,33 @@ bool Raytracer::readScene(const std::string& inputFilename)
             	string rm;
             	doc["RenderMode"] >> rm;
             	scene->setRenderMode(rm);
-            } catch (YAML::TypedKeyNotFound <std::string>& e){
-			}
+            } catch (YAML::TypedKeyNotFound <std::string>& e){}
 
             /// Set the shadow mode
             try{
             	bool shadowMode;
-				doc["Shadows"] >> shadowMode;
-				scene->setShadowMode(shadowMode);
-			} catch (YAML::TypedKeyNotFound <std::string>& e){
-			}
+					doc["Shadows"] >> shadowMode;
+					scene->setShadowMode(shadowMode);
+				} catch (YAML::TypedKeyNotFound <std::string>& e){}
 
             /// Set the maximum recursion depth
-			try {
-				int max;
-				doc["MaxRecursionDepth"] >> max;
-				scene->setMaxRecursionDepth(max);
-			} catch (YAML::TypedKeyNotFound <std::string>& e){
-			}
+				try {
+					int max;
+					doc["MaxRecursionDepth"] >> max;
+					scene->setMaxRecursionDepth(max);
+				} catch (YAML::TypedKeyNotFound <std::string>& e){
+					scene->setMaxRecursionDepth(0);
+				}
 
-			/// Set the supersampling factor
-			try {
-				const YAML::Node& SuperSampling = doc["SuperSampling"];
-				int superSampling;
-				SuperSampling["factor"] >> superSampling;
-				scene->setSuperSamplingFactor(superSampling);
-			} catch (YAML::TypedKeyNotFound <std::string>& e){
-			}
+				/// Set the supersampling factor
+				try {
+					const YAML::Node& SuperSampling = doc["SuperSampling"];
+					int superSampling;
+					SuperSampling["factor"] >> superSampling;
+					scene->setSuperSamplingFactor(superSampling);
+				} catch (YAML::TypedKeyNotFound <std::string>& e){
+					scene->setSuperSamplingFactor(1);
+				}
 
             // Read and parse the scene objects
             const YAML::Node& sceneObjects = doc["Objects"];

@@ -59,3 +59,8 @@ Hit Triangle::intersect(const Ray &ray)
         
     return Hit(t,N);
 }
+
+Color Triangle::calcTexture(Point hit){
+	Color n;
+	return n;
+}

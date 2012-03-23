@@ -22,6 +22,11 @@
 #define CONST_C apertureRadius/(up.length()*sqrt(apertureSamples))
 #define GOLDEN_ANGLE 137.508
 
+double minZB = std::numeric_limits<double>::max(); // for zBuffer
+double maxZB = std::numeric_limits<double>::min(); //
+
+
+// ------------------------------------------------------- findMinHit ---------------------------------------------------------------- //
 Hit Scene::findMinHit(const Ray &ray){
 	// Find nearest object and distance
     Hit min_hit(std::numeric_limits<double>::infinity(),Vector());
@@ -33,7 +38,7 @@ Hit Scene::findMinHit(const Ray &ray){
     }
     return min_hit;
 }
-
+// ------------------------------------------------------- traceNormal --------------------------------------------------------------- //
 Color Scene::traceNormal(const Ray &ray){
 
 	//Find the nearest object (hit)
@@ -50,50 +55,22 @@ Color Scene::traceNormal(const Ray &ray){
 	//Set the color
 	return Color(x, y, z);
 }
+// ------------------------------------------------------ traceZBuffer --------------------------------------------------------------- //
+double Scene::traceZBuffer(const Ray &ray){
 
-void Scene::traceZBuffer(Image &img){
-
-	Color color;
-	int w = img.width();
-   int h = img.height();
-
-
-	double zBuffer[w][h];
-	double min = std::numeric_limits<double>::min();
-	double max = std::numeric_limits<double>::max();
-
-	for (int y = 0; y < h; y++) {
-			for (int x = 0; x < w; x++) {
-				Point pixel(x+0.5, h-1-y+0.5, 0);
-				Ray ray(eye, (pixel-eye).normalized());
-				Hit min_hit = findMinHit(ray);
-
-				//If there's no hit, zbuffer value == inf
-				if (min_hit.t == std::numeric_limits<double>::infinity()){
-					zBuffer[x][y] = std::numeric_limits<double>::max();
-				} else if((min_hit.t) < min){
-					min = min_hit.t;
-					zBuffer[x][y] = min_hit.t;
-				} else if(min_hit.t > max){
-					max = min_hit.t;
-					zBuffer[x][y] = min_hit.t;
-				} else {
-					zBuffer[x][y] = min_hit.t;
-				}
-			}
-		}
-
-
-		for (int y = 0; y < h; y++){
-			for (int x = 0; x < w; x++){
-				color.set((-1*(zBuffer[x][y]-min)/(max-min))+1);
-				color.clamp();
-				img(x,y) = color;
-			}
-		}
-
+	Hit min_hit = findMinHit(ray);
+	if (min_hit.t == std::numeric_limits<double>::infinity()){
+		return std::numeric_limits<double>::max();
+	}
+	if (min_hit.t < minZB){
+		minZB = min_hit.t;
+	}
+	if(min_hit.t > maxZB){
+		maxZB = min_hit.t;
+	}
+	return min_hit.t;
 }
-
+// ------------------------------------------------------- depthOfField -------------------------------------------------------------- //
 Color Scene::depthOfField(Point p, Vector right, double pSize){
 	Color color;
 
@@ -103,11 +80,11 @@ Color Scene::depthOfField(Point p, Vector right, double pSize){
 		p += r*right;
 		p += r*up;
 		Ray ray(eye, (p-eye).normalized());
-		color += tracePhong(ray, 1);
+		color += tracePhongGooch(ray, 1);
 	}
 	return color /= apertureSamples;
 }
-
+// ------------------------------------------------------ superSample -----------------------------------------------------------------//
 Color Scene::superSample(Point p, Vector right, double pSize){	// p = left upper bound of pixel
 	Color color;
 
@@ -123,8 +100,8 @@ Color Scene::superSample(Point p, Vector right, double pSize){	// p = left upper
 	color.clamp();
 	return color;
 }
-
-Color Scene::tracePhong(const Ray &ray, int recursionDepth){
+// ----------------------------------------------------- tracePhong ------------------------------------------------------------------ //
+Color Scene::tracePhongGooch(const Ray &ray, int recursionDepth){
     // Find hit object and distance
     Hit min_hit(std::numeric_limits<double>::infinity(),Vector());
     Object *obj = NULL;
@@ -169,8 +146,8 @@ Color Scene::tracePhong(const Ray &ray, int recursionDepth){
 	for(unsigned int i = 0; i < lights.size(); i++){
 		bool isShadow = false;
 
-		//Ambiant		+ LightColor MaterialColor ka
-		color += lights[i]->color * material->color * material->ka;
+		if (rendermode == phong) //Ambiant
+			color += lights[i]->color * material->color * material->ka;
 
 		//Shadow
 		if(Shadow){
@@ -194,8 +171,17 @@ Color Scene::tracePhong(const Ray &ray, int recursionDepth){
 			//The R vector (required for specular shading)
 			Vector R = (-1*L) + 2 * (L.dot(N)) * N;
 
-			//Diffuse		+ dot(L,N) LightColor MaterialColor kd
-			color += (max(0.0,N.dot(L)) * lights[i]->color) * material->color * material->kd;
+			if (rendermode == phong) //Diffuse
+				if (material->texture){
+					color += (max(0.0,N.dot(L)) * lights[i]->color) * obj->calcTexture(hit) * material->kd;
+				} else { 
+					color += (max(0.0,N.dot(L)) * lights[i]->color) * material->color * material->kd;
+				}
+			if (rendermode == gooch && ray.D.dot(N)<-0.2){
+				Color kCool = Color(0.0,0.0,kBlue) + alpha * (lights[i]->color * material->color * material->kd);
+				Color kWarm = Color(kYellow,kYellow,0.0) + beta * (lights[i]->color * material->color * material->kd);
+				color += (kCool *(1 - N.dot(L))/2) + (kWarm * (1 + N.dot(L))/2);
+			}
 
 			//Specular		+ dot(R,V)^n LightColor ks
 			color += pow(max(0.0,R.dot(V)), material->n) * lights[i]->color * material->ks;
@@ -203,7 +189,7 @@ Color Scene::tracePhong(const Ray &ray, int recursionDepth){
 	}
 
 	//Reflection
-	if(recursionDepth <= maxRecursionDepth){
+	if(recursionDepth <= maxRecursionDepth && ray.D.dot(N)<-0.2){
 		Color buffer(0.0, 0.0, 0.0);
 
 		//The reflected direction
@@ -215,7 +201,7 @@ Color Scene::tracePhong(const Ray &ray, int recursionDepth){
 			Ray reflect(hit + 0.001 * N, -reflectV);
 
 			//Calculate reflection through recursion
-			buffer += material->ks*tracePhong(reflect, recursionDepth+1);
+			buffer += material->ks*tracePhongGooch(reflect, recursionDepth+1);
 			reflectV.x += 0.01 * cos(0.5);
 			reflectV.y += 0.01 * sin(0.5);
 		}
@@ -226,35 +212,73 @@ Color Scene::tracePhong(const Ray &ray, int recursionDepth){
 
     return color;
 }
-
+// ------------------------------------------------------ render -------------------------------------------------------------------- //
 void Scene::render(Image &img){
-    if(!superSamplingFactor)
-		superSamplingFactor = 1;
-    int w = img.width();
-    int h = img.height();
 
-	if(rendermode == zbuffer){
-		traceZBuffer(img);
-    }
+	int w = img.width();
+	int h = img.height();
 
-	if(rendermode == phong || rendermode == normal){
-		Vector right = ((center-eye).cross(up)).normalized();			// right vector
-		double pSize = up.length();											// pixel size as length of up vector
-		Point leftUp(center - (w/2)*pSize*right + (h/2)*pSize*up);	// pixel left upper bound
+	Vector right = ((center-eye).cross(up)).normalized();			// right vector
+	double pSize = up.length();											// pixel size as length of up vector
+	Point leftUp(center - (w/2)*pSize*right + (h/2)*pSize*up);	// pixel left upper bound
 
-		Color color;
-		for (int y = 0; y < h; y++) {
-			for (int x = 0; x < w; x++) {
-				Point pixel = leftUp + (x*pSize*right) - (y*pSize*up);		// go to correct x,y position
-				if (rendermode == normal){
-					Ray ray(eye, ((pixel + right*pSize/2 - up*pSize/2)-eye).normalized());
-					color = traceNormal(ray);
-				} else {
-					color = superSample(pixel, right, pSize);
-				}
+	double zBuffer[w][h];
+
+	cout << "eye: " << eye.x << "," << eye.y << "," << eye.z << endl;
+	cout << "center: " << center.x << "," << center.y << "," << center.z << endl;
+	cout << "up: " << up.x << "," << up.y << "," << up.z << endl;
+	cout << "right: " << right.x << "," << right.y << "," << right.z << endl;
+	cout << "viewSize: " << w << "," << h << endl;
+	cout << "leftUp: " << leftUp.x << "," << leftUp.y << "," << leftUp.z << endl;
+	cout << "pSize: " << pSize << endl;
+	cout << "maxRecursionDepth: " << maxRecursionDepth << endl;
+	cout << "superSamplingFactor: " << superSamplingFactor << endl;
+	cout << "apertureSamples: " << apertureSamples << endl;
+	cout << "apertureRadius: " << apertureRadius << endl;
+
+	Color color;
+	for (int y = 0; y < h; y++) {
+		for (int x = 0; x < w; x++) {
+			Point pixel = leftUp + (x*pSize*right) - (y*pSize*up);		// go to correct x,y position
+			if (rendermode == phong || rendermode == gooch){
+				img(x,y) = superSample(pixel, right, pSize);
+			}
+			if (rendermode == normal){
+				Ray ray(eye, ((pixel + right*pSize/2 - up*pSize/2)-eye).normalized());
+				img(x,y) = traceNormal(ray);
+			}
+			if (rendermode == zbuffer){
+				Ray ray(eye, ((pixel + right*pSize/2 - up*pSize/2)-eye).normalized());
+				zBuffer[x][y] = traceZBuffer(ray);
+			}
+		}
+	}
+
+	if (rendermode == zbuffer){
+		for (int y = 0; y < h; y++){
+			for (int x = 0; x < w; x++){
+				color.set((-1*(zBuffer[x][y]-minZB)/(maxZB-minZB))+1);
+				color.clamp();
 				img(x,y) = color;
 			}
 		}
+	}
+}
+
+// -------------------------------------------------------- setters ------------------------------------------------------------------ //
+
+void Scene::setRenderMode(string rm){
+	if(!rm.compare("phong")){
+		rendermode = phong;
+	}
+	if(!rm.compare("zbuffer")){
+		rendermode = zbuffer;
+	}
+	if(!rm.compare("normal")){
+		rendermode = normal;
+	}
+	if(!rm.compare("gooch")){
+		rendermode = gooch;
 	}
 }
 
@@ -270,22 +294,28 @@ void Scene::setEye(Triple e){
     eye = e;
 }
 
-void Scene::setCenter(Triple e){
-	center = e;
+void Scene::setBlue(double b){
+	kBlue = b;
 }
 
-void Scene::setUp(Triple e){
-	up = e;
+void Scene::setYellow(double y){
+	kYellow = y;
 }
 
-void Scene::setRenderMode(string rm){
-	if(!rm.compare("phong")){
-		rendermode = phong;
-	}else if(!rm.compare("zbuffer")){
-		rendermode = zbuffer;
-	}else if(!rm.compare("normal")){
-		rendermode = normal;
-	}
+void Scene::setBeta(double b){
+	beta = b;
+}
+
+void Scene::setAlpha(double a){
+	alpha = a;
+}
+
+void Scene::setCenter(Triple c){
+	center = c;
+}
+
+void Scene::setUp(Triple u){
+	up = u;
 }
 
 void Scene::setShadowMode(bool shadowMode){

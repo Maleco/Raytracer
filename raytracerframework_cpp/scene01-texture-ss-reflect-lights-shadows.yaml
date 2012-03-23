@@ -12,18 +12,7 @@
 #  The example scene description should largely speak for itself. By now
 #  it should be clear that the #-character can be used to insert comments.
 
-RenderMode: "gooch"
-Camera:
-    eye: [200,200,1000]
-    center: [200,200,0]
-    up: [0,1,0]
-    viewSize: [400,400]
-
-GoochParameters:
-  b: 0.55
-  y: 0.3
-  alpha: 0.25
-  beta: 0.5
+Eye: [200,200,1000]  
 
 Shadows: true
 MaxRecursionDepth: 2
@@ -67,8 +56,8 @@ Objects:
 - type: sphere
   position: [140,220,400]
   radius: 50
-  material: # yellow
-    color: [1.0,0.8,0.0]
+  material:
+    texture: earth.png
     ka: 0.2
     kd: 0.8
     ks: 0

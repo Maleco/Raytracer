@@ -838,3 +838,418 @@
 	<iostream>
 	"exp.h"
 
+1266337486 source:/home/maikel/git/RayTracer/raytracerframework_cpp/image.cpp
+	"image.h"
+	"lodepng.h"
+	<fstream>
+
+1266337486 /home/maikel/git/RayTracer/raytracerframework_cpp/image.h
+	<iostream>
+	"triple.h"
+
+1266337486 /home/maikel/git/RayTracer/raytracerframework_cpp/triple.h
+	<math.h>
+	<iostream>
+
+1266337486 /home/maikel/git/RayTracer/raytracerframework_cpp/lodepng.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<vector>
+	<string>
+	<fstream>
+	"lodepng.h"
+	<iostream>
+	"lodepng.h"
+	<iostream>
+	"lodepng.h"
+
+1266337486 source:/home/maikel/git/RayTracer/raytracerframework_cpp/light.cpp
+	"light.h"
+
+1331199200 /home/maikel/git/RayTracer/raytracerframework_cpp/light.h
+	<iostream>
+	<limits>
+	"triple.h"
+
+1266337486 source:/home/maikel/git/RayTracer/raytracerframework_cpp/lodepng.cpp
+	"lodepng.h"
+
+1266337486 source:/home/maikel/git/RayTracer/raytracerframework_cpp/main.cpp
+	"raytracer.h"
+
+1266337486 /home/maikel/git/RayTracer/raytracerframework_cpp/raytracer.h
+	<iostream>
+	<string>
+	"triple.h"
+	"light.h"
+	"scene.h"
+	"yaml/yaml.h"
+
+1332327645 /home/maikel/git/RayTracer/raytracerframework_cpp/scene.h
+	<vector>
+	<string.h>
+	"triple.h"
+	"light.h"
+	"object.h"
+	"image.h"
+
+1332332884 /home/maikel/git/RayTracer/raytracerframework_cpp/object.h
+	"triple.h"
+	"light.h"
+
+1252188360 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/yaml.h
+	"crt.h"
+	"parser.h"
+	"node.h"
+	"iterator.h"
+	"emitter.h"
+	"stlemitter.h"
+	"exceptions.h"
+
+1252188360 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/crt.h
+	<stdlib.h>
+	<crtdbg.h>
+
+1255988690 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/parser.h
+	"node.h"
+	"parserstate.h"
+	"noncopyable.h"
+	<ios>
+	<string>
+	<vector>
+	<map>
+	<memory>
+
+1252270918 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/node.h
+	"conversion.h"
+	"exceptions.h"
+	"iterator.h"
+	"mark.h"
+	"noncopyable.h"
+	"parserstate.h"
+	<iostream>
+	<string>
+	<vector>
+	<map>
+	<memory>
+	"nodeimpl.h"
+	"nodereadimpl.h"
+
+1252270918 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/conversion.h
+	"null.h"
+	<string>
+	<sstream>
+
+1252188360 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/null.h
+
+1252188360 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/exceptions.h
+	"mark.h"
+	<exception>
+	<string>
+	<sstream>
+
+1252188360 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/mark.h
+
+1252188360 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/iterator.h
+
+1252188360 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/noncopyable.h
+
+1252188360 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/parserstate.h
+	<string>
+	<map>
+
+1255321274 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/nodeimpl.h
+	"nodeutil.h"
+
+1252188360 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/nodeutil.h
+
+1255321274 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/nodereadimpl.h
+
+1255990788 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/emitter.h
+	"emittermanip.h"
+	"ostream.h"
+	"null.h"
+	<memory>
+	<string>
+
+1255990788 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/emittermanip.h
+	<string>
+
+1252188360 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/ostream.h
+	<string>
+
+1252188360 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/stlemitter.h
+	<vector>
+	<list>
+	<map>
+
+1299165570 source:/home/maikel/git/RayTracer/raytracerframework_cpp/quad.cpp
+	"quad.h"
+	"triangle.h"
+	<iostream>
+	<math.h>
+
+1299164224 /home/maikel/git/RayTracer/raytracerframework_cpp/quad.h
+	"object.h"
+
+1330528053 /home/maikel/git/RayTracer/raytracerframework_cpp/triangle.h
+	"object.h"
+
+1266337486 source:/home/maikel/git/RayTracer/raytracerframework_cpp/triple.cpp
+	"triple.h"
+
+1252188362 source:/home/maikel/git/RayTracer/raytracerframework_cpp/yaml/aliascontent.cpp
+	"crt.h"
+	"aliascontent.h"
+
+1252188362 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/aliascontent.h
+	"content.h"
+
+1252188362 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/content.h
+	<vector>
+	<map>
+	"parserstate.h"
+	"exceptions.h"
+	"ltnode.h"
+
+1252188362 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/ltnode.h
+
+1241895008 source:/home/maikel/git/RayTracer/raytracerframework_cpp/yaml/content.cpp
+	"crt.h"
+	"content.h"
+
+1252270918 source:/home/maikel/git/RayTracer/raytracerframework_cpp/yaml/conversion.cpp
+	"conversion.h"
+	<algorithm>
+
+1256244756 source:/home/maikel/git/RayTracer/raytracerframework_cpp/yaml/emitter.cpp
+	"emitter.h"
+	"emitterstate.h"
+	"emitterutils.h"
+	"indentation.h"
+	"exceptions.h"
+	<sstream>
+
+1255990798 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/emitterstate.h
+	"setting.h"
+	"emittermanip.h"
+	<cassert>
+	<vector>
+	<stack>
+	<memory>
+
+1252188362 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/setting.h
+	<memory>
+	<vector>
+	"noncopyable.h"
+
+1255990790 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/emitterutils.h
+	"ostream.h"
+	<string>
+
+1252188362 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/indentation.h
+	"ostream.h"
+	<iostream>
+
+1255990792 source:/home/maikel/git/RayTracer/raytracerframework_cpp/yaml/emitterstate.cpp
+	"emitterstate.h"
+	"exceptions.h"
+
+1255991142 source:/home/maikel/git/RayTracer/raytracerframework_cpp/yaml/emitterutils.cpp
+	"emitterutils.h"
+	"exp.h"
+	"indentation.h"
+	"exceptions.h"
+	"stringsource.h"
+	<sstream>
+	<iomanip>
+
+1255990796 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/exp.h
+	"regex.h"
+	<string>
+	<ios>
+	"stream.h"
+
+1252188362 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/regex.h
+	<vector>
+	<string>
+	"regeximpl.h"
+
+1252188362 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/regeximpl.h
+	"stream.h"
+	"stringsource.h"
+	"streamcharsource.h"
+
+1252188362 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/stream.h
+	"noncopyable.h"
+	"mark.h"
+	<deque>
+	<ios>
+	<string>
+	<iostream>
+	<set>
+
+1252188362 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/stringsource.h
+	<cstddef>
+
+1252188362 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/streamcharsource.h
+	"noncopyable.h"
+	<cstddef>
+
+1256244756 source:/home/maikel/git/RayTracer/raytracerframework_cpp/yaml/exp.cpp
+	"crt.h"
+	"exp.h"
+	"exceptions.h"
+	<sstream>
+
+1241895008 source:/home/maikel/git/RayTracer/raytracerframework_cpp/yaml/iterator.cpp
+	"crt.h"
+	"node.h"
+	"exceptions.h"
+	"iterpriv.h"
+
+1252188362 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/iterpriv.h
+	"ltnode.h"
+	<vector>
+	<map>
+
+1252270918 source:/home/maikel/git/RayTracer/raytracerframework_cpp/yaml/map.cpp
+	"crt.h"
+	"map.h"
+	"node.h"
+	"scanner.h"
+	"token.h"
+	"exceptions.h"
+	"emitter.h"
+	<memory>
+
+1252266590 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/map.h
+	"content.h"
+	<map>
+
+1252188362 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/scanner.h
+	<ios>
+	<string>
+	<queue>
+	<stack>
+	<set>
+	<map>
+	"stream.h"
+	"token.h"
+
+1252188362 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/token.h
+	"mark.h"
+	<ios>
+	<string>
+	<vector>
+
+1252188362 source:/home/maikel/git/RayTracer/raytracerframework_cpp/yaml/node.cpp
+	"crt.h"
+	"node.h"
+	"token.h"
+	"scanner.h"
+	"content.h"
+	"parser.h"
+	"scalar.h"
+	"sequence.h"
+	"map.h"
+	"aliascontent.h"
+	"iterpriv.h"
+	"emitter.h"
+	<stdexcept>
+
+1252188362 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/scalar.h
+	"content.h"
+	<string>
+
+1252188362 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/sequence.h
+	"content.h"
+	<vector>
+
+1252188362 source:/home/maikel/git/RayTracer/raytracerframework_cpp/yaml/null.cpp
+	"null.h"
+	"node.h"
+
+1252188362 source:/home/maikel/git/RayTracer/raytracerframework_cpp/yaml/ostream.cpp
+	"ostream.h"
+	<cstring>
+
+1255988690 source:/home/maikel/git/RayTracer/raytracerframework_cpp/yaml/parser.cpp
+	"crt.h"
+	"parser.h"
+	"scanner.h"
+	"token.h"
+	"exceptions.h"
+	<sstream>
+	<cstdio>
+
+1241895008 source:/home/maikel/git/RayTracer/raytracerframework_cpp/yaml/parserstate.cpp
+	"crt.h"
+	"parserstate.h"
+
+1252188362 source:/home/maikel/git/RayTracer/raytracerframework_cpp/yaml/regex.cpp
+	"crt.h"
+	"regex.h"
+
+1252188362 source:/home/maikel/git/RayTracer/raytracerframework_cpp/yaml/scalar.cpp
+	"crt.h"
+	"scalar.h"
+	"scanner.h"
+	"token.h"
+	"exceptions.h"
+	"node.h"
+	"emitter.h"
+
+1255321274 source:/home/maikel/git/RayTracer/raytracerframework_cpp/yaml/scanner.cpp
+	"crt.h"
+	"scanner.h"
+	"token.h"
+	"exceptions.h"
+	"exp.h"
+	<cassert>
+
+1255321274 source:/home/maikel/git/RayTracer/raytracerframework_cpp/yaml/scanscalar.cpp
+	"crt.h"
+	"scanscalar.h"
+	"scanner.h"
+	"exp.h"
+	"exceptions.h"
+	"token.h"
+
+1255321274 /home/maikel/git/RayTracer/raytracerframework_cpp/yaml/scanscalar.h
+	<string>
+	"regex.h"
+	"stream.h"
+
+1256244756 source:/home/maikel/git/RayTracer/raytracerframework_cpp/yaml/scantoken.cpp
+	"crt.h"
+	"scanner.h"
+	"token.h"
+	"exceptions.h"
+	"exp.h"
+	"scanscalar.h"
+	<sstream>
+
+1252188362 source:/home/maikel/git/RayTracer/raytracerframework_cpp/yaml/sequence.cpp
+	"crt.h"
+	"sequence.h"
+	"node.h"
+	"scanner.h"
+	"token.h"
+	"emitter.h"
+	<stdexcept>
+
+1252188362 source:/home/maikel/git/RayTracer/raytracerframework_cpp/yaml/simplekey.cpp
+	"crt.h"
+	"scanner.h"
+	"token.h"
+	"exceptions.h"
+	"exp.h"
+
+1252188362 source:/home/maikel/git/RayTracer/raytracerframework_cpp/yaml/stream.cpp
+	"crt.h"
+	"stream.h"
+	<iostream>
+	"exp.h"
+

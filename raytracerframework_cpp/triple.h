@@ -7,9 +7,9 @@
 //
 //  Author: Maarten Everts
 //
-//  This framework is inspired by and uses code of the raytracer framework of 
+//  This framework is inspired by and uses code of the raytracer framework of
 //  Bert Freudenberg that can be found at
-//  http://isgwww.cs.uni-magdeburg.de/graphik/lehre/cg2/projekt/rtprojekt.html 
+//  http://isgwww.cs.uni-magdeburg.de/graphik/lehre/cg2/projekt/rtprojekt.html
 //
 
 #ifndef TRIPLE_H_SEVQHPTA
@@ -166,7 +166,7 @@ public:
         x *= invl;
         y *= invl;
         z *= invl;
-    }	
+    }
 
     friend istream& operator>>(istream &s, Triple &v);
     friend ostream& operator<<(ostream &s, const Triple &v);
@@ -199,6 +199,10 @@ public:
         if (r > maxValue) r = maxValue;
         if (g > maxValue) g = maxValue;
         if (b > maxValue) b = maxValue;
+
+        if (r < 0) r = 0;
+        if (g < 0) g = 0;
+        if (b < 0) b = 0;
     }
 
     union {

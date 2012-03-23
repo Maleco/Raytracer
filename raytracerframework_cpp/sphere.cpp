@@ -13,6 +13,7 @@
 //  Bert Freudenberg that can be found at
 //  http://isgwww.cs.uni-magdeburg.de/graphik/lehre/cg2/projekt/rtprojekt.html
 //
+#define PI (3.141592653589793)
 
 #include "sphere.h"
 #include <iostream>
@@ -20,8 +21,7 @@
 
 /************************** Sphere **********************************/
 
-Hit Sphere::intersect(const Ray &ray)
-{
+Hit Sphere::intersect(const Ray &ray){
     /****************************************************
     * RT1.1: INTERSECTION CALCULATION
     *
@@ -60,21 +60,6 @@ Hit Sphere::intersect(const Ray &ray)
       }
     }
 
-	/*
-    Vector diff = ray.O - position;
-    //Discriminant
-    double discr = ((ray.D.dot(diff)) * (ray.D.dot(diff))) - (ray.D.dot(ray.D)*(diff.dot(diff)) - r*r);
-    double t_min, t_plus;
-
-    //Solve the formula to t
-    if (discr < 0){
-      return Hit::NO_HIT();
-    } else {
-      t_min = (-ray.D.dot(ray.O-position) - sqrt(discr))/ray.D.dot(ray.D);
-      t_plus = (-ray.D.dot(ray.O-position) + sqrt(discr))/ray.D.dot(ray.D);
-    }
-    double t = min(t_min,t_plus);
-	*/
     /****************************************************
     * RT1.2: NORMAL CALCULATION
     *
@@ -88,4 +73,29 @@ Hit Sphere::intersect(const Ray &ray)
     N.normalize();
 
     return Hit(t,N);
+}
+
+Color Sphere::calcTexture(Point hit){
+	double theta = acos((hit.z-position.z)/r);
+	double phi = atan2(hit.y-position.y,hit.x-position.x);
+
+	if (phi<0)
+		phi = phi+2*PI;
+
+	double rotX = 0.3*(90.0/360.0);
+	double rotY = 0.5*(90.0/360.0);
+	double rotZ = 0.7*(90.0/360.0);
+	//cout << rotX << " " << rotY << endl;
+
+	double u = rotY + (phi/(2*PI));
+	double v = ((PI-theta)/PI) + rotX;
+
+	if (u>0.0)
+		u = u-1.0;
+
+	if (v>1.0)
+		v = v-1.0;
+
+
+	return material->texture->colorAt(u,v);
 }

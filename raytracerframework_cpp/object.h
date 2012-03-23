@@ -9,9 +9,9 @@
 //    Maarten Everts
 //    Jasper van de Gronde
 //
-//  This framework is inspired by and uses code of the raytracer framework of 
+//  This framework is inspired by and uses code of the raytracer framework of
 //  Bert Freudenberg that can be found at
-//  http://isgwww.cs.uni-magdeburg.de/graphik/lehre/cg2/projekt/rtprojekt.html 
+//  http://isgwww.cs.uni-magdeburg.de/graphik/lehre/cg2/projekt/rtprojekt.html
 //
 
 #ifndef OBJECT_H_AXKLE0OF
@@ -19,6 +19,7 @@
 
 #include "triple.h"
 #include "light.h"
+#include "material.h"
 
 class Material;
 
@@ -29,6 +30,7 @@ public:
     virtual ~Object() { }
 
     virtual Hit intersect(const Ray &ray) = 0;
+    virtual Color calcTexture(Point hit)=0;
 };
 
 #endif /* end of include guard: OBJECT_H_AXKLE0OF */

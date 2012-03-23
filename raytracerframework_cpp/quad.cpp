@@ -54,3 +54,9 @@ Hit Quad::intersect(const Ray &ray)
     return Hit::NO_HIT();
 
 }
+
+Color Quad::calcTexture(Point hit){
+	Color n;
+	return n;
+}
+

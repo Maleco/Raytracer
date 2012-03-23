@@ -9,9 +9,9 @@
 //    Tom Eijkelenkamp
 //    Hans-Rudolf Woldring
 //
-//  This framework is inspired by and uses code of the raytracer framework of 
+//  This framework is inspired by and uses code of the raytracer framework of
 //  Bert Freudenberg that can be found at
-//  http://isgwww.cs.uni-magdeburg.de/graphik/lehre/cg2/projekt/rtprojekt.html 
+//  http://isgwww.cs.uni-magdeburg.de/graphik/lehre/cg2/projekt/rtprojekt.html
 //
 
 #ifndef QUAD_H_115209AE
@@ -27,12 +27,13 @@ public:
     Point C;
     Point D;
     Vector N;
-  
-    Quad(const Point A, const Point B, const Point C, const Point D) 
+
+    Quad(const Point A, const Point B, const Point C, const Point D)
 	: A(A), B(B), C(C), D(D), N((B-A).cross(C-A))
     { }
 
     virtual Hit intersect(const Ray &ray);
+    virtual Color calcTexture(Point hit);
 };
 
 #endif /* end of include guard: QUAD_H_115209AE */
